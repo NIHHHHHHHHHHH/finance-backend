@@ -4,11 +4,18 @@ const Transaction = require("../models/Transaction");
 
 const getTransactions = async (req, res, next) => {
   try {
-    const { type, category, startDate, endDate, page = 1, limit = 20 } = req.query;
+    const { type, category, startDate, endDate, page = 1, limit = 20, search } = req.query;
 
     const filter = {};
     if (type) filter.type = type;
     if (category) filter.category = { $regex: category, $options: "i" };
+    if (search) {
+      filter.$or = [
+        { category: { $regex: search, $options: "i" } },
+        { notes: { $regex: search, $options: "i" } },
+        { type: { $regex: search, $options: "i" } },
+      ];
+    }
     if (startDate || endDate) {
       filter.date = {};
       if (startDate) filter.date.$gte = new Date(startDate);
