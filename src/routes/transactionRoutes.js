@@ -13,9 +13,9 @@ const { transactionValidation, updateTransactionValidation } = require("../utils
 // All routes require authentication
 router.use(protect);
 
-// Read access: all roles
-router.get("/", getTransactions);
-router.get("/:id", getTransactionById);
+// Read access: viewer, analyst, admin
+router.get("/", authorize("viewer", "analyst", "admin"), getTransactions);
+router.get("/:id", authorize("viewer", "analyst", "admin"), getTransactionById);
 
 // Write access: admin only
 router.post("/", authorize("admin"), transactionValidation, createTransaction);
