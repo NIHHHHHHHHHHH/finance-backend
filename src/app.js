@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 
+// Trust proxy - required for rate limiting on Render
+app.set("trust proxy", 1);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
