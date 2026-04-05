@@ -12,13 +12,33 @@ app.use("/api/transactions", require("./routes/transactionRoutes"));
 app.use("/api/dashboard", require("./routes/dashboardRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 
+
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "Welcome to Finance Dashboard API",
+    version: "1.0.0",
+    endpoints: {
+      health: "/api/health",
+      auth: "/api/auth",
+      transactions: "/api/transactions",
+      dashboard: "/api/dashboard",
+      users: "/api/users",
+    },
+    documentation: "Import finance-api.postman_collection.json in Postman to test all APIs",
+  });
+});
+
 app.get("/api/health", (req, res) => {
   res.json({ success: true, message: "Finance API is running." });
 });
 
+
 app.use((req, res) => {
   res.status(404).json({ success: false, message: "Route not found." });
 });
+
+
 
 app.use(require("./middleware/errorHandler"));
 
