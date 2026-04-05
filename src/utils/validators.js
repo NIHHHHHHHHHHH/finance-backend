@@ -15,7 +15,28 @@ const loginValidation = [
   body("password").notEmpty().withMessage("Password is required."),
 ];
 
+const transactionValidation = [
+  body("amount")
+    .isFloat({ min: 0.01 })
+    .withMessage("Amount must be a positive number greater than 0."),
+  body("type").isIn(["income", "expense"]).withMessage("Type must be income or expense."),
+  body("category").trim().notEmpty().withMessage("Category is required."),
+  body("date").optional().isISO8601().withMessage("Date must be a valid ISO date."),
+  body("notes").optional().trim(),
+];
+
+const updateTransactionValidation = [
+  body("amount").optional().isFloat({ min: 0.01 }).withMessage("Amount must be a positive number greater than 0."),
+  body("type").optional().isIn(["income", "expense"]).withMessage("Type must be income or expense."),
+  body("category").optional().trim().notEmpty().withMessage("Category cannot be empty."),
+  body("date").optional().isISO8601().withMessage("Date must be a valid ISO date."),
+  body("notes").optional().trim(),
+];
+
+
 module.exports = {
   registerValidation,
   loginValidation,
+  transactionValidation,
+  updateTransactionValidation,
 };
