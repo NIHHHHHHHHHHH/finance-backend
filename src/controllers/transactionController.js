@@ -105,12 +105,14 @@ const updateTransaction = async (req, res, next) => {
   }
 };
 
-
 const deleteTransaction = async (req, res, next) => {
   try {
-    const transaction = await Transaction.findByIdAndDelete(req.params.id);
+    const result = await Transaction.updateOne(
+      { _id: req.params.id },
+      { isDeleted: true, deletedAt: new Date() }
+    );
 
-    if (!transaction) {
+    if (result.matchedCount === 0) {
       return res.status(404).json({ success: false, message: "Transaction not found." });
     }
 

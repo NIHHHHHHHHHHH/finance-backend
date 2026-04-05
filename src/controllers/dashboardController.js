@@ -4,7 +4,7 @@ const Transaction = require("../models/Transaction");
 const getSummary = async (req, res, next) => {
   try {
     const result = await Transaction.aggregate([
-      { $match: {} },
+      { $match: {isDeleted: false} },
       {
         $group: {
           _id: "$type",
@@ -40,7 +40,7 @@ const getSummary = async (req, res, next) => {
 const getCategoryTotals = async (req, res, next) => {
   try {
     const { type } = req.query; // optional filter: income | expense
-    const matchStage = {  };
+    const matchStage = { isDeleted: false };
     if (type) matchStage.type = type;
 
     const categoryTotals = await Transaction.aggregate([
@@ -74,7 +74,7 @@ const getCategoryTotals = async (req, res, next) => {
 const getMonthlyTrends = async (req, res, next) => {
   try {
     const { year } = req.query;
-    const matchStage = { };
+    const matchStage = { isDeleted: false };
 
     if (year) {
       matchStage.date = {

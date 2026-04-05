@@ -32,8 +32,21 @@ const transactionSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true }
 );
+
+// Mongoose 8.x - automatically exclude soft deleted records
+transactionSchema.pre(/^find/, function () {
+  this.where({ isDeleted: false });
+});
 
 module.exports = mongoose.model("Transaction", transactionSchema);
